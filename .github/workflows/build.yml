@@ -2,15 +2,29 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [ amd64, arm64 ]
     steps:
       - uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
       - name: Build the image
-        run: ./build base
+        run: ./build linuxKernelBuilder-${{ matrix.arch }}
+      - name: Upload debian ${{ matrix.arch }} image
+        uses: actions/upload-artifact@v4
+        with:
+          name: linuxKernelBuilder-${{ matrix.arch }}
+          path: |
+            .build/linuxKernelBuilder-${{ matrix.arch }}-trixie-*.raw
+          if-no-files-found: ignore
+          retention-days: 3

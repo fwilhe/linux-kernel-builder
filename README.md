@@ -1,5 +1,3 @@
-# Builder Example 
-
-This is a basic example of utilizing the GardenLinux builder.
-For more comprehensive information, please refer to the [Gardenlinux/builder](https://github.com/gardenlinux/builder) repository.
-
+```
+..../bin/start-vm --cpu 6 --mem 8Gi --skipkp .build/linuxKernelBuilder...raw
+```
